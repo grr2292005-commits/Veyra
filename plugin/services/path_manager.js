@@ -41,12 +41,20 @@
         extensionDir = path.resolve('.');
       }
 
-      // 2. Inspect engine_config.json in extension directory
+      // 2. Inspect engine_config.json in extension directory or localappdata
       if (fs && path && extensionDir) {
+        const homeDir = (typeof process !== 'undefined' && process.env && process.env.USERPROFILE)
+          ? process.env.USERPROFILE
+          : (os && os.homedir ? os.homedir() : "");
+        const localAppData = (typeof process !== 'undefined' && process.env && process.env.LOCALAPPDATA)
+          ? process.env.LOCALAPPDATA
+          : (homeDir ? path.join(homeDir, 'AppData', 'Local') : "");
+
         const configCandidates = [
           path.join(extensionDir, 'engine_config.json'),
           path.join(extensionDir, 'premiere', 'engine_config.json'),
-          path.join(extensionDir, '..', 'engine_config.json')
+          path.join(extensionDir, '..', 'engine_config.json'),
+          ...(localAppData ? [path.join(localAppData, 'Veyra', 'config', 'engine_config.json')] : [])
         ];
 
         for (const cfgPath of configCandidates) {
@@ -143,6 +151,13 @@
           path.join(projectRoot, '.venv', 'bin', 'python')
         ];
 
+        if (localAppData) {
+          venvCandidates.push(
+            path.join(localAppData, 'Veyra', 'runtime', 'Scripts', 'pythonw.exe'),
+            path.join(localAppData, 'Veyra', 'runtime', 'Scripts', 'python.exe')
+          );
+        }
+
         for (const venvPy of venvCandidates) {
           if (fs.existsSync(venvPy)) {
             pythonExe = venvPy;
@@ -151,10 +166,11 @@
         }
       }
 
-      // Check environment variable
-      if (!pythonExe && typeof process !== 'undefined' && process.env && process.env.SPEECHIFY_PYTHON_EXE) {
-        if (fs && fs.existsSync(process.env.SPEECHIFY_PYTHON_EXE)) {
-          pythonExe = process.env.SPEECHIFY_PYTHON_EXE;
+      // Check environment variables
+      if (!pythonExe && typeof process !== 'undefined' && process.env) {
+        const envPy = process.env.VEYRA_PYTHON_EXE || process.env.SPEECHIFY_PYTHON_EXE;
+        if (envPy && fs && fs.existsSync(envPy)) {
+          pythonExe = envPy;
         }
       }
 

@@ -47,6 +47,8 @@ desktop.ini
 dist/
 build/
 release/
+release-portable/
+release-standard/
 *.egg-info/
 
 # Test artifacts

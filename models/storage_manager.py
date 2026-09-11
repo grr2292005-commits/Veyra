@@ -42,16 +42,27 @@ class ModelStorageManager:
     @classmethod
     def get_default_location(cls) -> str:
         """
-        Determines the default managed storage directory for Speechify models.
-        Uses %APPDATA%/Speechify/Models on Windows.
+        Determines the default managed storage directory for Veyra models.
+        Prefers %LOCALAPPDATA%/Veyra/models on Windows.
+        Maintains backward compatibility with %APPDATA%/Speechify/Models if populated.
         Automatically creates standard model subfolders:
-        Speechify/Models/{MP-SENet, ZipEnhancer-S, MossFormerGAN-SE, DeepFilterNet3}
+        {MP-SENet, ZipEnhancer-S, MossFormerGAN-SE, DeepFilterNet3}
         """
+        localappdata = os.environ.get("LOCALAPPDATA")
         appdata = os.environ.get("APPDATA")
-        if appdata:
-            managed_dir = os.path.join(appdata, "Speechify", "Models")
+
+        veyra_dir = os.path.join(localappdata, "Veyra", "models") if localappdata else None
+        legacy_dir = os.path.join(appdata, "Speechify", "Models") if appdata else None
+
+        # If legacy directory already exists and has model files, preserve it for existing users
+        if legacy_dir and os.path.isdir(legacy_dir) and any(os.path.isdir(os.path.join(legacy_dir, f)) for f in os.listdir(legacy_dir)):
+            managed_dir = legacy_dir
+        elif veyra_dir:
+            managed_dir = veyra_dir
+        elif legacy_dir:
+            managed_dir = legacy_dir
         else:
-            managed_dir = os.path.expanduser("~/Speechify/Models")
+            managed_dir = os.path.expanduser("~/Veyra/models")
 
         managed_dir = os.path.abspath(managed_dir)
         os.makedirs(managed_dir, exist_ok=True)
