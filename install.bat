@@ -9,6 +9,7 @@ echo ===========================================================================
 echo.
 
 set "SCRIPT_DIR=%~dp0"
+if exist "%SCRIPT_DIR%..\engine\server.py" set "SCRIPT_DIR=%SCRIPT_DIR%..\"
 cd /d "%SCRIPT_DIR%"
 
 if not exist "%SCRIPT_DIR%logs" mkdir "%SCRIPT_DIR%logs" 2>nul
@@ -33,7 +34,7 @@ for %%v in (7 8 9 10 11 12 13 14 15 16) do (
 )
 echo [OK] Extension debug mode enabled for all Adobe CSXS versions.
 
-:: Step 3: Verify & Locate Speechify Private Runtime
+:: Step 3: Verify & Locate Veyra Private Runtime
 echo.
 echo [3/5] Locating and Verifying Private Veyra Runtime...
 set "PYTHON_EXE="

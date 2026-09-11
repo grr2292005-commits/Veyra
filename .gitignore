@@ -46,6 +46,7 @@ desktop.ini
 # Build artifacts
 dist/
 build/
+release/
 *.egg-info/
 
 # Test artifacts

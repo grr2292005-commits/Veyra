@@ -76,13 +76,17 @@
         let cursor = extensionDir;
         for (let i = 0; i < 5; i++) {
           const candServer = path.join(cursor, 'engine', 'server.py');
+          const candVeyraServer = path.join(cursor, 'Veyra', 'engine', 'server.py');
           const candProServer = path.join(cursor, 'SpeechEnhancerPro', 'engine', 'server.py');
-
           const candSpeechify = path.join(cursor, 'Speechify', 'engine', 'server.py');
 
           if (fs.existsSync(candServer)) {
             engineScript = candServer;
             projectRoot = cursor;
+            break;
+          } else if (fs.existsSync(candVeyraServer)) {
+            engineScript = candVeyraServer;
+            projectRoot = path.join(cursor, 'Veyra');
             break;
           } else if (fs.existsSync(candSpeechify)) {
             engineScript = candSpeechify;
@@ -107,6 +111,9 @@
 
         if (homeDir) {
           const candidates = [
+            path.join(homeDir, 'AppData', 'Local', 'Veyra'),
+            path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Veyra'),
+            path.join(process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)', 'Veyra'),
             path.join(homeDir, 'AppData', 'Local', 'Speechify'),
             path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Speechify'),
             path.join(process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)', 'Speechify')

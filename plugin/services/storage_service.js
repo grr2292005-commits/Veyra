@@ -40,7 +40,7 @@
           path: defaultPath,
           rawPath: defaultPath,
           isManaged: true,
-          displayTitle: "Speechify managed storage",
+          displayTitle: "Veyra managed storage",
           displaySubtext: "Models are stored locally on this computer.",
           modelsCount: 0,
           accessible: true,
@@ -87,7 +87,7 @@
       if (typeof window !== 'undefined' && window.CSInterface) {
         try {
           const cs = new window.CSInterface();
-          const jsxCode = `(function(){ var f = Folder.selectDialog("Choose Speechify Model Storage Location"); return f ? f.fsName : ""; })()`;
+          const jsxCode = `(function(){ var f = Folder.selectDialog("Choose Veyra Model Storage Location"); return f ? f.fsName : ""; })()`;
           const selectedPath = await new Promise(resolve => {
             cs.evalScript(jsxCode, res => resolve(res));
           });
@@ -170,7 +170,7 @@
           path: data.storage_path,
           rawPath: data.storage_path,
           isManaged: data.is_managed !== false,
-          displayTitle: data.display_title || (data.is_managed ? "Speechify managed storage" : "Custom location"),
+          displayTitle: data.display_title || (data.is_managed ? "Veyra managed storage" : "Custom location"),
           displaySubtext: data.display_subtext || data.storage_path,
           modelsCount: data.models_count || 0,
           accessible: true,
@@ -225,7 +225,7 @@
           path: data.storage_path,
           rawPath: data.storage_path,
           isManaged: true,
-          displayTitle: data.display_title || "Speechify managed storage",
+          displayTitle: data.display_title || "Veyra managed storage",
           displaySubtext: data.display_subtext || "Models are stored locally on this computer.",
           modelsCount: data.models_count || 0,
           accessible: true,
@@ -274,7 +274,7 @@
             path: data.storage_path,
             rawPath: data.storage_path,
             isManaged: data.is_managed !== false,
-            displayTitle: data.display_title || "Speechify managed storage",
+            displayTitle: data.display_title || "Veyra managed storage",
             displaySubtext: data.display_subtext || data.storage_path,
             modelsCount: data.models_count || 0,
             accessible: true,
@@ -318,7 +318,7 @@
             path: data.storage_directory || "",
             rawPath: data.storage_directory || "",
             isManaged: data.is_managed !== false,
-            displayTitle: data.display_title || "Speechify managed storage",
+            displayTitle: data.display_title || "Veyra managed storage",
             displaySubtext: data.display_subtext || "Models are stored locally on this computer.",
             modelsCount: data.models_count || 0,
             accessible: true,

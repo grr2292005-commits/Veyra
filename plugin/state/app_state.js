@@ -31,7 +31,7 @@
           path: "",
           rawPath: "",
           isManaged: true,
-          displayTitle: "Speechify managed storage",
+          displayTitle: "Veyra managed storage",
           displaySubtext: "Models are stored locally on this computer.",
           accessible: true,
           error: null,
