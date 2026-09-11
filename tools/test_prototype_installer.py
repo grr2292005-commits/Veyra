@@ -40,10 +40,27 @@ def run_test():
     os.makedirs(test_config, exist_ok=True)
     os.makedirs(test_cache, exist_ok=True)
     
-    # 1. Test Runtime Creation
+    # 1. Test Runtime Creation with Python 3.11
     print("\n[Step 1] Creating isolated private virtual environment in:")
     print(f"  {test_runtime}")
-    base_py = sys.executable
+    base_py = None
+    cands = [
+        os.path.join(proj_root, "release-portable", "runtime", "Scripts", "python.exe"),
+        r"C:\Users\grr22\AppData\Local\Programs\Python\Python311\python.exe",
+        os.path.expandvars(r"%LOCALAPPDATA%\Programs\Python\Python311\python.exe"),
+        sys.executable
+    ]
+    for c in cands:
+        if os.path.isfile(c):
+            try:
+                res = subprocess.run([c, "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"], capture_output=True, text=True)
+                if res.stdout.strip() == "3.11":
+                    base_py = c
+                    break
+            except Exception:
+                pass
+    if not base_py:
+        base_py = sys.executable
     cmd = [base_py, "-m", "venv", test_runtime]
     res = subprocess.run(cmd, capture_output=True, text=True)
     if res.returncode != 0:
@@ -57,9 +74,9 @@ def run_test():
         return False
     print(f"  [PASS] Private runtime created: {test_python}")
     
-    # 2. Populate dependencies in test runtime from existing runtime site-packages
-    print("\n[Step 2] Linking/provisioning packages into test runtime...")
-    source_sp = os.path.join(proj_root, "runtime", "Lib", "site-packages")
+    source_sp = os.path.join(proj_root, "release-portable", "runtime", "Lib", "site-packages")
+    if not os.path.isdir(source_sp):
+        source_sp = os.path.join(proj_root, "runtime", "Lib", "site-packages")
     target_sp = os.path.join(test_runtime, "Lib", "site-packages")
     
     # Create .pth in target site-packages pointing to source packages to avoid 5GB duplicate
@@ -70,8 +87,12 @@ def run_test():
     
     # 3. Test PyTorch Import & CUDA Detection
     print("\n[Step 3] Testing PyTorch import and CUDA detection...")
-    chk_cmd = [test_python, "-c", "import torch; print(f'TORCH_VERSION={torch.__version__};CUDA_AVAILABLE={torch.cuda.is_available()};DEVICE_NAME={torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"None\"}')"]
-    p_chk = subprocess.run(chk_cmd, capture_output=True, text=True)
+    torch_lib = os.path.join(source_sp, "torch", "lib")
+    chk_env = os.environ.copy()
+    if os.path.isdir(torch_lib):
+        chk_env["PATH"] = torch_lib + os.pathsep + chk_env.get("PATH", "")
+    chk_cmd = [test_python, "-c", "import os, sys; torch_lib = r'" + torch_lib + "'; os.add_dll_directory(torch_lib) if os.path.isdir(torch_lib) else None; import torch; print(f'TORCH_VERSION={torch.__version__};CUDA_AVAILABLE={torch.cuda.is_available()};DEVICE_NAME={torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"None\"}')"]
+    p_chk = subprocess.run(chk_cmd, capture_output=True, text=True, env=chk_env)
     if p_chk.returncode != 0:
         print(f"[FAIL] PyTorch check failed: {p_chk.stderr}")
         return False
@@ -97,6 +118,8 @@ def run_test():
     env = os.environ.copy()
     env["VEYRA_DIR"] = test_target
     env["LOCALAPPDATA"] = os.path.dirname(test_target)
+    if os.path.isdir(torch_lib):
+        env["PATH"] = torch_lib + os.pathsep + env.get("PATH", "")
     
     srv_proc = subprocess.Popen([test_python, "-B", engine_script], env=env)
     try:

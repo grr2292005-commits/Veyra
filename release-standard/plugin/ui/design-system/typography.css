@@ -1,0 +1,55 @@
+/* ==========================================================================
+   Speechify Design System — Typography
+   Clear, restrained typography without decorative fonts or excessive weights
+   ========================================================================== */
+
+body, html {
+  font-family: var(--sp-font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--sp-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings & Hierarchy */
+.sp-title-product {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.sp-subtitle {
+  font-size: 11px;
+  color: var(--sp-text-muted);
+  font-weight: 400;
+}
+
+.sp-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--sp-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sp-body {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--sp-text-primary);
+}
+
+.sp-meta {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--sp-text-secondary);
+}
+
+.sp-mono {
+  font-family: var(--sp-font-mono);
+  font-size: 11px;
+}

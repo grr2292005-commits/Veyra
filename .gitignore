@@ -48,7 +48,8 @@ dist/
 build/
 release/
 release-portable/
-release-standard/
+cache/
+benchmark_envs/
 *.egg-info/
 
 # Test artifacts

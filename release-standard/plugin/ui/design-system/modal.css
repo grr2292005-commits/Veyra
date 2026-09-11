@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Speechify Design System — Modals & Dialogs
+   Compact dialogs for Settings and Model Manager
+   ========================================================================== */
+
+.sp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.sp-modal-backdrop.open {
+  display: flex;
+  animation: spModalFadeIn 120ms ease;
+}
+
+/* Modal Stacking Order: Settings (base) -> Model Manager (child) -> Migrate (dialog) */
+#settingsModal {
+  z-index: 200;
+}
+
+#modelManagerModal {
+  z-index: 250;
+}
+
+#migrateModal {
+  z-index: 300;
+}
+
+@keyframes spModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sp-modal-dialog {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--sp-bg-surface);
+  border: 1px solid var(--sp-border-medium);
+  border-radius: var(--sp-radius-lg);
+  box-shadow: var(--sp-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 85vh;
+}
+
+.sp-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: var(--sp-bg-surface-elevated);
+  border-bottom: 1px solid var(--sp-border-subtle);
+}
+
+.sp-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.sp-modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.sp-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: var(--sp-bg-surface-elevated);
+  border-top: 1px solid var(--sp-border-subtle);
+}
+
+/* Modal Form Groups */
+.sp-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sp-form-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sp-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sp-form-desc {
+  font-size: 11px;
+  color: var(--sp-text-muted);
+  line-height: 1.35;
+}
+
+.sp-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sp-checkbox-row input[type="checkbox"] {
+  accent-color: var(--sp-accent-primary);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.sp-checkbox-label {
+  font-size: 12px;
+  color: var(--sp-text-secondary);
+}
+
+/* Manage Models Modal Lists */
+.sp-model-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-model-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background-color: var(--sp-bg-input);
+  border: 1px solid var(--sp-border-subtle);
+  border-radius: var(--sp-radius-md);
+  gap: 8px;
+}
+
+.sp-model-row-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sp-model-row-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.sp-model-row-meta {
+  font-size: 11px;
+  color: var(--sp-text-muted);
+}
+
+.sp-model-row-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--sp-accent-success);
+  font-weight: 500;
+}

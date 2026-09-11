@@ -1,0 +1,28 @@
+/* ==========================================================================
+   Speechify Design System — Containers & Cards
+   Reserved strictly for high-priority grouped content (no card overload)
+   ========================================================================== */
+
+.sp-card {
+  background-color: var(--sp-bg-surface);
+  border: 1px solid var(--sp-border-subtle);
+  border-radius: var(--sp-radius-md);
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.sp-card-elevated {
+  background-color: var(--sp-bg-surface-elevated);
+  border: 1px solid var(--sp-border-medium);
+  border-radius: var(--sp-radius-md);
+  padding: 12px;
+  box-shadow: var(--sp-shadow-sm);
+  box-sizing: border-box;
+}
+
+.sp-divider {
+  height: 1px;
+  background-color: var(--sp-border-subtle);
+  width: 100%;
+  margin: 4px 0;
+}
