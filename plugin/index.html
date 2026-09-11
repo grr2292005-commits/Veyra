@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veyra</title>
+  <script>
+    window.onerror = function (msg, url, line, col, error) {
+      console.error("[Speechify Top-Level Error]", msg, url, line, col, error);
+      try {
+        if (window.require) {
+          var fs = window.require('fs');
+          var path = window.require('path');
+          var logFile = path.join(__dirname, '..', 'logs', 'boot.log');
+          fs.appendFileSync(logFile, "[" + new Date().toISOString() + "] [TOP_LEVEL_ERROR] " + msg + " at " + url + ":" + line + ":" + col + "\n");
+        }
+      } catch (e) {}
+    };
+    window.onunhandledrejection = function (event) {
+      console.error("[Speechify Unhandled Rejection]", event.reason);
+      try {
+        if (window.require) {
+          var fs = window.require('fs');
+          var path = window.require('path');
+          var logFile = path.join(__dirname, '..', 'logs', 'boot.log');
+          fs.appendFileSync(logFile, "[" + new Date().toISOString() + "] [UNHANDLED_REJECTION] " + (event.reason ? (event.reason.stack || event.reason) : "Unknown") + "\n");
+        }
+      } catch (e) {}
+    };
+  </script>
+  <link rel="stylesheet" href="ui/design-system/tokens.css">
+  <link rel="stylesheet" href="ui/design-system/typography.css">
+  <link rel="stylesheet" href="ui/design-system/buttons.css">
+  <link rel="stylesheet" href="ui/design-system/dropdown.css">
+  <link rel="stylesheet" href="ui/design-system/components.css">
+  <link rel="stylesheet" href="ui/design-system/cards.css">
+  <link rel="stylesheet" href="ui/design-system/modal.css">
+  <link rel="stylesheet" href="ui/design-system/progress.css">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <div class="sp-app">
+
+    <!-- Top App Header -->
+    <header class="sp-header">
+      <div class="sp-header-left">
+        <span class="sp-title-product">Veyra</span>
+      </div>
+      <div class="sp-header-right">
+        <!-- Dedicated EngineStatusIndicator Component -->
+        <div id="engineStatusIndicator" class="sp-engine-status starting" role="status" aria-live="polite">
+          <span id="statusStartingText" class="sp-status-text">Starting…</span>
+          <span id="statusReadyCheck" class="sp-status-check" title="Speech engine ready" aria-label="Speech engine ready" style="display: none;">
+            <svg class="sp-status-check-icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3.5 8.5 6.5 11.5 12.5 4.5"></polyline>
+            </svg>
+          </span>
+          <div id="statusErrorWrap" class="sp-status-error-wrap" style="display: none;">
+            <span class="sp-status-error-icon" title="Speech engine unavailable">!</span>
+            <button id="retryEngineBtn" class="sp-btn sp-btn-secondary sp-retry-btn" title="Retry connection">Retry</button>
+          </div>
+        </div>
+
+        <button id="openSettingsBtn" class="sp-btn sp-btn-icon" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 1. Main View (Primary Workflow) -->
+    <main id="mainView" class="sp-view sp-main-view active">
+
+      <!-- Sequence Info Bar -->
+      <div class="sp-sequence-row">
+        <span id="activeSequenceTitle" class="sp-sequence-title">Sequence 01</span>
+        <span id="sequenceSpecs" class="sp-sequence-specs">48 kHz &bull; 29.97 fps</span>
+      </div>
+
+      <!-- Scope Switcher & Summary -->
+      <section class="sp-section">
+        <span class="sp-section-label">Process</span>
+        <div class="sp-segmented-control" id="scopeSelector">
+          <button class="sp-segmented-btn active" data-scope="selected_clips">Selected Clips</button>
+          <button class="sp-segmented-btn" data-scope="in_out">In / Out</button>
+          <button class="sp-segmented-btn" data-scope="full_sequence">Full Sequence</button>
+        </div>
+
+        <div class="sp-selection-summary" id="selectionSummary">
+          <span id="selectionCountText">1 audio clip</span>
+          <strong id="selectionDurationText">26.5 s</strong>
+        </div>
+
+        <div class="sp-empty-state" id="selectionEmptyState" style="display: none;">
+          <span class="sp-empty-title" id="selectionEmptyTitle">No audio clips selected</span>
+          <span class="sp-empty-desc" id="selectionEmptyDesc">Select an audio clip in the timeline to begin.</span>
+        </div>
+
+        <!-- Compact Track Selector (Shown ONLY for In / Out and Full Sequence) -->
+        <div id="audioTracksSection" style="display: none; margin-top: 10px;">
+          <span class="sp-section-label">Audio tracks</span>
+          <div class="sp-dropdown-container" id="trackDropdown" style="margin-top: 4px;">
+            <div class="sp-dropdown-trigger" id="trackDropdownTrigger" tabindex="0" role="combobox" aria-expanded="false">
+              <span id="selectedTracksSummary" class="sp-dropdown-selected-text">Select audio tracks</span>
+              <svg class="sp-dropdown-chevron" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 10l5 5 5-5z"/>
+              </svg>
+            </div>
+            <div class="sp-dropdown-menu sp-track-menu" id="trackDropdownMenu" role="listbox">
+              <div class="sp-track-header">Audio tracks</div>
+              <div id="trackListContainer">
+                <!-- Rendered dynamically -->
+              </div>
+              <div class="sp-track-footer">
+                <button id="trackDoneBtn" class="sp-btn sp-btn-secondary sp-track-done-btn">Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Model Selector (Clean Dropdown) -->
+      <section class="sp-section">
+        <div class="sp-section-label">
+          <span>Model</span>
+          <span id="modelRecommendMeta" class="sp-meta" style="color: var(--sp-accent-primary-hover); text-transform: none; letter-spacing: normal;"></span>
+        </div>
+
+        <div class="sp-dropdown-container" id="modelDropdown">
+          <div class="sp-dropdown-trigger" id="modelDropdownTrigger" tabindex="0" role="combobox" aria-expanded="false">
+            <div class="sp-dropdown-selected-wrap">
+              <span id="selectedModelName" class="sp-dropdown-selected-text">MP-SENet</span>
+              <span id="selectedModelBadge" class="sp-dropdown-opt-badge" style="display: inline-block;">Recommended</span>
+            </div>
+            <svg class="sp-dropdown-chevron" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </div>
+
+          <div class="sp-dropdown-menu" id="modelDropdownMenu" role="listbox">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <span id="modelMetadataLine" class="sp-meta">Very high quality &bull; ~8&times; realtime &bull; GPU</span>
+      </section>
+
+      <!-- Output Placement Mode -->
+      <section class="sp-section">
+        <span class="sp-section-label">Output</span>
+        <div class="sp-dropdown-container" id="outputDropdown">
+          <div class="sp-dropdown-trigger" id="outputDropdownTrigger" tabindex="0" role="combobox" aria-expanded="false">
+            <span id="selectedOutputText" class="sp-dropdown-selected-text">Add to timeline + project bin</span>
+            <svg class="sp-dropdown-chevron" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 10l5 5 5-5z"/>
+            </svg>
+          </div>
+
+          <div class="sp-dropdown-menu" id="outputDropdownMenu" role="listbox">
+            <div class="sp-dropdown-option selected" data-value="new_track">
+              <div class="sp-dropdown-opt-header">
+                <span class="sp-dropdown-opt-title">Add to timeline + project bin</span>
+              </div>
+              <span class="sp-dropdown-opt-desc">Inserts on dedicated voice track</span>
+            </div>
+            <div class="sp-dropdown-option" data-value="project_only">
+              <div class="sp-dropdown-opt-header">
+                <span class="sp-dropdown-opt-title">Project bin only</span>
+              </div>
+              <span class="sp-dropdown-opt-desc">Imports to Veyra bin without placing</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Primary Action -->
+      <div class="sp-action-section">
+        <button id="enhanceBtn" class="sp-btn sp-btn-primary">Enhance Speech</button>
+      </div>
+
+    </main>
+
+    <!-- 2. Focused Processing View -->
+    <div id="processingView" class="sp-view sp-processing-view">
+      <span class="sp-proc-title">Enhancing speech</span>
+      <span id="procScopeContext" class="sp-proc-context" style="font-size: 13px; font-weight: 500; color: #ffffff; margin-top: 3px;"></span>
+      <span id="procTrackDetail" class="sp-meta" style="color: var(--sp-text-secondary); margin-top: 1px; font-size: 11px;"></span>
+      <span id="procModelName" class="sp-proc-model" style="margin-top: 6px;">MP-SENet</span>
+      <span id="procClipIndicator" class="sp-meta" style="color: var(--sp-text-secondary); margin-top: -2px; font-size: 11px; display: none;"></span>
+
+      <div class="sp-progress-track">
+        <div id="progressBarFill" class="sp-progress-fill"></div>
+      </div>
+
+      <div class="sp-proc-meta-row">
+        <span id="progressPctText" class="sp-proc-pct">0%</span>
+        <span id="progressCountdownText" class="sp-proc-countdown">Estimating time...</span>
+      </div>
+
+      <span class="sp-proc-local-note">Processing locally</span>
+
+      <button id="cancelJobBtn" class="sp-btn sp-btn-tertiary" style="margin-top: 12px;">Cancel</button>
+    </div>
+
+    <!-- 3. Success Completion View -->
+    <div id="successView" class="sp-view sp-success-view">
+      <div class="sp-success-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      </div>
+      <span class="sp-proc-title">Speech enhanced</span>
+      <span id="successSummaryText" class="sp-meta">MP-SENet &bull; 26.5 s</span>
+      <span id="successPlacementNote" class="sp-proc-local-note">Added to Veyra bin and timeline</span>
+      <button id="doneSuccessBtn" class="sp-btn sp-btn-secondary" style="margin-top: 14px; min-width: 110px;">Done</button>
+    </div>
+
+  </div>
+
+  <!-- Settings Modal (Compact & Essential) -->
+  <div id="settingsModal" class="sp-modal-backdrop">
+    <div class="sp-modal-dialog">
+      <div class="sp-modal-header">
+        <span class="sp-modal-title">Settings</span>
+        <button id="closeSettingsModalBtn" class="sp-btn sp-btn-icon" aria-label="Close">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+
+      <div class="sp-modal-body">
+        <!-- Model Storage -->
+        <div class="sp-form-group">
+          <span class="sp-form-label">Model Storage</span>
+          <div class="sp-storage-card">
+            <div class="sp-storage-info">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span id="storageTypeTitle" class="sp-storage-title">Veyra managed storage</span>
+                <span id="storageBadge" class="sp-meta" style="font-size: 10px; padding: 1px 5px; border-radius: 3px; background: rgba(99, 102, 241, 0.12); color: var(--sp-accent-primary-hover); font-weight: 600; letter-spacing: 0.02em;">Managed</span>
+              </div>
+              <span id="storageSubtext" class="sp-storage-subtext" style="display: block; margin-top: 3px; font-size: 11px; color: var(--sp-text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 280px; cursor: default;" title="">Models are stored locally on this computer.</span>
+              <span id="storageModelsSummary" class="sp-meta" style="margin-top: 2px; color: var(--sp-text-secondary);"></span>
+              <div id="storageLocationUnavailable" style="display: none; margin-top: 4px; padding: 4px 8px; background: rgba(239, 68, 68, 0.08); border-radius: var(--sp-radius-sm); border-left: 2px solid var(--sp-accent-warning, #ef4444);">
+                <span class="sp-meta" style="color: var(--sp-accent-warning, #ef4444); font-weight: 500;">⚠ Current location unavailable</span>
+              </div>
+            </div>
+            <div class="sp-storage-actions">
+              <button id="changeStorageBtn" class="sp-btn sp-btn-secondary" style="font-size: 11px; padding: 3px 8px;">Change location</button>
+              <button id="resetStorageBtn" class="sp-btn sp-btn-secondary" style="font-size: 11px; padding: 3px 8px; display: none;">Reset to default</button>
+              <button id="openMigrateModalBtn" class="sp-btn sp-btn-tertiary" style="padding: 2px 4px; font-size: 11px;">Move existing models&hellip;</button>
+            </div>
+          </div>
+          <!-- Hidden fallback elements for backwards compatibility -->
+          <input type="hidden" id="storagePathInput">
+          <button id="chooseFolderBtn" style="display: none;"></button>
+          <button id="saveStoragePathBtn" style="display: none;"></button>
+          <div id="discoveredModelsNotice" style="display: none; margin-top: 6px; padding: 6px 8px; background: rgba(99, 102, 241, 0.08); border-radius: var(--sp-radius-sm); border-left: 2px solid var(--sp-accent-primary);">
+            <span id="discoveredModelsText" class="sp-meta" style="color: var(--sp-accent-primary-hover);"></span>
+          </div>
+          <span id="storageSaveStatus" class="sp-meta" style="color: var(--sp-accent-success); display: none; margin-top: 4px;"></span>
+        </div>
+
+        <!-- Models -->
+        <div class="sp-form-group">
+          <span class="sp-form-label">Models</span>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span class="sp-form-desc">View or download speech enhancement models.</span>
+            <button id="openModelManagerBtn" class="sp-btn sp-btn-secondary">Manage Models</button>
+          </div>
+        </div>
+
+        <!-- Performance / Processing Device -->
+        <div class="sp-form-group">
+          <span class="sp-form-label">Performance</span>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <span id="hardwareInfoText" class="sp-meta">Detecting hardware…</span>
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 2px;">
+              <span class="sp-form-desc">Processing Device</span>
+              <!-- Custom Accessible Dropdown matching Speechify Design System -->
+              <div class="sp-dropdown-container" id="deviceDropdown">
+                <div class="sp-dropdown-trigger" id="deviceDropdownTrigger" tabindex="0" role="combobox" aria-expanded="false">
+                  <div class="sp-dropdown-selected-wrap">
+                    <span id="selectedDeviceText" class="sp-dropdown-selected-text">Automatic (Recommended)</span>
+                  </div>
+                  <svg class="sp-dropdown-chevron" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z"/>
+                  </svg>
+                </div>
+                <div class="sp-dropdown-menu" id="deviceDropdownMenu" role="listbox">
+                  <!-- Rendered dynamically from AppState -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advanced Collapsible -->
+        <div class="sp-form-group" style="margin-top: 4px;">
+          <button id="toggleAdvancedBtn" class="sp-btn sp-btn-tertiary" style="padding: 0; justify-content: flex-start;">
+            <span>Advanced settings &#9662;</span>
+          </button>
+          <div id="advancedSection" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px;">
+            <label class="sp-checkbox-row">
+              <input type="checkbox" id="normalizeCheck">
+              <span class="sp-checkbox-label">Normalize audio level (-24 LUFS / EBU R128)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sp-modal-footer">
+        <button id="doneSettingsModalBtn" class="sp-btn sp-btn-secondary" style="min-width: 80px;">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Explicit Model Migration Modal -->
+  <div id="migrateModal" class="sp-modal-backdrop">
+    <div class="sp-modal-dialog">
+      <div class="sp-modal-header">
+        <span class="sp-modal-title">Move Existing Models</span>
+        <button id="closeMigrateModalBtn" class="sp-btn sp-btn-icon" aria-label="Close">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+
+      <div class="sp-modal-body">
+        <span class="sp-form-desc">Move neural model checkpoints from your current location to the target storage folder.</span>
+        <div style="margin-top: 8px; padding: 8px; background: var(--sp-surface-input); border-radius: var(--sp-radius-sm); border: 1px solid var(--sp-border-subtle); display: flex; flex-direction: column; gap: 4px;">
+          <span id="migrateSourceText" class="sp-meta" style="word-break: break-all;">Source: ...</span>
+          <span id="migrateTargetText" class="sp-meta" style="word-break: break-all;">Target: ...</span>
+          <span id="migrateInfoText" class="sp-meta" style="color: var(--sp-accent-primary-hover); font-weight: 500;">4 models found &bull; ~56 MB</span>
+        </div>
+        <span id="migrateStatusText" class="sp-meta" style="margin-top: 6px; display: none;"></span>
+      </div>
+
+      <div class="sp-modal-footer" style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button id="cancelMigrateBtn" class="sp-btn sp-btn-secondary">Cancel</button>
+        <button id="confirmMigrateBtn" class="sp-btn sp-btn-primary">Move Models</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Manager Modal -->
+  <div id="modelManagerModal" class="sp-modal-backdrop">
+    <div class="sp-modal-dialog">
+      <div class="sp-modal-header">
+        <span class="sp-modal-title">Manage Models</span>
+        <button id="closeModelManagerBtn" class="sp-btn sp-btn-icon" aria-label="Close">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+
+      <div class="sp-modal-body">
+        <div class="sp-model-list-section">
+          <span class="sp-section-label">Installed Models</span>
+          <div id="installedModelsList" style="display: flex; flex-direction: column; gap: 6px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="sp-model-list-section" style="margin-top: 8px;">
+          <span class="sp-section-label">Available Models</span>
+          <div id="availableModelsList" style="display: flex; flex-direction: column; gap: 6px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <div class="sp-modal-footer">
+        <button id="doneModelManagerBtn" class="sp-btn sp-btn-secondary" style="min-width: 80px;">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="sp-toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="premiere/CSInterface.js"></script>
+  <script src="premiere/time_utils.js"></script>
+  <script src="state/app_state.js"></script>
+  <script src="services/path_manager.js"></script>
+  <script src="services/storage_service.js"></script>
+  <script src="premiere/dom_bridge.js"></script>
+  <script src="premiere/engine_manager.js"></script>
+  <script src="services/boot_controller.js"></script>
+  <script src="services/hardware_manager.js"></script>
+  <script src="services/placement_service.js"></script>
+  <script src="services/context_manager.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+/* ==========================================================================
+   Speechify Design System — Design Tokens
+   Clean, calm, minimal tokens for professional creative applications
+   ========================================================================== */
+
+:root {
+  /* Color Palette — Slate Dark Theme */
+  --sp-bg-canvas: #111317;
+  --sp-bg-surface: #181a20;
+  --sp-bg-surface-elevated: #22252e;
+  --sp-bg-surface-hover: #292d38;
+  --sp-bg-surface-active: #323745;
+  --sp-bg-input: #14161c;
+
+  /* Borders & Dividers */
+  --sp-border-subtle: rgba(255, 255, 255, 0.08);
+  --sp-border-medium: rgba(255, 255, 255, 0.14);
+  --sp-border-focus: #3b82f6;
+
+  /* Text Colors */
+  --sp-text-primary: #f4f4f5;
+  --sp-text-secondary: #a1a1aa;
+  --sp-text-muted: #71717a;
+  --sp-text-disabled: #52525b;
+
+  /* Semantic Accents (Calm & Professional) */
+  --sp-accent-primary: #2563eb;
+  --sp-accent-primary-hover: #3b82f6;
+  --sp-accent-primary-subtle: rgba(37, 99, 235, 0.12);
+  
+  --sp-accent-success: #10b981;
+  --sp-accent-success-subtle: rgba(16, 185, 129, 0.12);
+  --sp-accent-warning: #f59e0b;
+  --sp-accent-error: #ef4444;
+
+  /* Typography Stack */
+  --sp-font-sans: "Adobe Clean", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Source Sans Pro", Helvetica, Arial, sans-serif;
+  --sp-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Radii */
+  --sp-radius-sm: 4px;
+  --sp-radius-md: 6px;
+  --sp-radius-lg: 10px;
+  --sp-radius-pill: 9999px;
+
+  /* Control Heights */
+  --sp-height-sm: 26px;
+  --sp-height-md: 32px;
+  --sp-height-lg: 40px;
+
+  /* Shadows */
+  --sp-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --sp-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --sp-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+  /* Transitions */
+  --sp-transition-fast: 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  --sp-transition-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}

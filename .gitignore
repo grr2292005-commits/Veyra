@@ -1,0 +1,61 @@
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Developer virtual environments & runtime
+runtime/
+benchmark_archive/
+.venv/
+venv/
+env/
+
+# Model checkpoints (downloaded in-app via SHA-256 verification)
+checkpoints/
+models/storage/
+*.bin
+*.pt
+*.ckpt
+*.best
+g_best_dns
+
+# Local runtime data
+Speechify/
+Temp/
+logs/
+engine.lock
+*.log
+models/storage_config.json
+tests/results.json
+tests/adversarial_results.json
+tests/health_report.json
+
+# IDE and editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test artifacts
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Installer-generated config
+plugin/engine_config.json
+
+# Planning and development docs (not part of the product)
+.planning/
+.agents/

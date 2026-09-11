@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Speechify Design System — Focused Processing & Success Views
+   Calm, centered states replacing the main UI during enhancement
+   ========================================================================== */
+
+.sp-processing-view,
+.sp-success-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  text-align: center;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sp-proc-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.sp-proc-model {
+  font-size: 12px;
+  color: var(--sp-text-secondary);
+  margin-top: -8px;
+}
+
+.sp-progress-track {
+  width: 100%;
+  max-width: 280px;
+  height: 6px;
+  background-color: var(--sp-bg-input);
+  border-radius: var(--sp-radius-pill);
+  overflow: hidden;
+  position: relative;
+}
+
+.sp-progress-fill {
+  height: 100%;
+  width: 0%;
+  background-color: var(--sp-accent-primary);
+  border-radius: var(--sp-radius-pill);
+  transition: width 160ms ease;
+}
+
+.sp-proc-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 280px;
+  font-size: 11px;
+  color: var(--sp-text-muted);
+}
+
+.sp-proc-pct {
+  font-family: var(--sp-font-mono);
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.sp-proc-countdown {
+  font-size: 11px;
+  color: var(--sp-text-secondary);
+}
+
+.sp-proc-local-note {
+  font-size: 11px;
+  color: var(--sp-text-muted);
+}
+
+/* Success View */
+.sp-success-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--sp-accent-success-subtle);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--sp-accent-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp-success-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}

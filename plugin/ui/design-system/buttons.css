@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Speechify Design System — Buttons
+   Exactly 3 unified button levels: Primary, Secondary, Tertiary
+   ========================================================================== */
+
+.sp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sp-font-sans);
+  border: 1px solid transparent;
+  border-radius: var(--sp-radius-md);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: all var(--sp-transition-fast);
+  outline: none;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sp-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--sp-border-focus);
+}
+
+/* 1. Primary Button (Enhance Speech) */
+.sp-btn-primary {
+  width: 100%;
+  height: var(--sp-height-lg);
+  padding: 0 16px;
+  background-color: var(--sp-accent-primary);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: var(--sp-shadow-sm);
+}
+
+.sp-btn-primary:hover:not(:disabled) {
+  background-color: var(--sp-accent-primary-hover);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.sp-btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.sp-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 2. Secondary Button (Change, Manage Models, Done) */
+.sp-btn-secondary {
+  height: var(--sp-height-md);
+  padding: 0 12px;
+  background-color: var(--sp-bg-surface-elevated);
+  border-color: var(--sp-border-subtle);
+  color: var(--sp-text-primary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sp-btn-secondary:hover:not(:disabled) {
+  background-color: var(--sp-bg-surface-hover);
+  border-color: var(--sp-border-medium);
+}
+
+.sp-btn-secondary:active:not(:disabled) {
+  background-color: var(--sp-bg-surface-active);
+}
+
+.sp-btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 3. Tertiary Button (Cancel, Close, Settings Gear, Ghost) */
+.sp-btn-tertiary {
+  height: var(--sp-height-md);
+  padding: 0 8px;
+  background: transparent;
+  color: var(--sp-text-secondary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sp-btn-tertiary:hover:not(:disabled) {
+  color: var(--sp-text-primary);
+  background-color: var(--sp-bg-surface-hover);
+}
+
+.sp-btn-tertiary:active:not(:disabled) {
+  background-color: var(--sp-bg-surface-active);
+}
+
+/* Icon-only Button (e.g. Settings, Close) */
+.sp-btn-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: var(--sp-radius-sm);
+  background: transparent;
+  color: var(--sp-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp-btn-icon:hover {
+  color: var(--sp-text-primary);
+  background-color: var(--sp-bg-surface-elevated);
+}
+
+.sp-btn-icon svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}

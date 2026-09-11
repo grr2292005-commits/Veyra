@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Speechify — Master Stylesheet
+   Imports centralized design system tokens and defines root panel layout
+   ========================================================================== */
+
+@import "../ui/design-system/tokens.css";
+@import "../ui/design-system/typography.css";
+@import "../ui/design-system/buttons.css";
+@import "../ui/design-system/dropdown.css";
+@import "../ui/design-system/components.css";
+@import "../ui/design-system/cards.css";
+@import "../ui/design-system/modal.css";
+@import "../ui/design-system/progress.css";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--sp-bg-canvas);
+  color: var(--sp-text-primary);
+  overflow-x: hidden;
+  overflow-y: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sp-bg-canvas);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sp-bg-surface-elevated);
+  border-radius: var(--sp-radius-pill);
+}
+
+/* App Container */
+.sp-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header */
+.sp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background-color: var(--sp-bg-surface);
+  border-bottom: 1px solid var(--sp-border-subtle);
+  flex-shrink: 0;
+}
+
+.sp-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sp-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Main View Layout (Core Workflow) */
+.sp-main-view {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+/* Flow Section Group */
+.sp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Sequence Bar */
+.sp-sequence-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sp-sequence-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sp-sequence-specs {
+  font-size: 11px;
+  color: var(--sp-text-muted);
+}
+
+/* Dynamic Views Switcher */
+.sp-view {
+  display: none;
+  width: 100%;
+}
+
+.sp-view.active {
+  display: flex;
+}
+
+/* Action Container */
+.sp-action-section {
+  margin-top: auto;
+  padding-top: 8px;
+}

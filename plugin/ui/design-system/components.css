@@ -1,0 +1,343 @@
+/* ==========================================================================
+   Speechify Design System — Core Components
+   Segmented controls, inputs, status indicators, empty states
+   ========================================================================== */
+
+/* 1. Compact Segmented Control (Scope Switcher) */
+.sp-segmented-control {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: var(--sp-bg-input);
+  padding: 2px;
+  border-radius: var(--sp-radius-md);
+  border: 1px solid var(--sp-border-subtle);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sp-segmented-btn {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--sp-text-muted);
+  border-radius: var(--sp-radius-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: all var(--sp-transition-fast);
+  border: none;
+  background: transparent;
+  padding: 0 4px;
+}
+
+.sp-segmented-btn:hover {
+  color: var(--sp-text-primary);
+}
+
+.sp-segmented-btn.active {
+  background-color: var(--sp-bg-surface-elevated);
+  color: #ffffff;
+  font-weight: 500;
+  box-shadow: var(--sp-shadow-sm);
+  border: 1px solid var(--sp-border-subtle);
+}
+
+/* 2. Text Input */
+.sp-input-text {
+  width: 100%;
+  height: var(--sp-height-md);
+  padding: 0 10px;
+  background-color: var(--sp-bg-input);
+  border: 1px solid var(--sp-border-subtle);
+  border-radius: var(--sp-radius-md);
+  color: var(--sp-text-primary);
+  font-family: var(--sp-font-sans);
+  font-size: 12px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--sp-transition-fast);
+}
+
+.sp-input-text:focus {
+  border-color: var(--sp-border-focus);
+}
+
+/* 3. Semantic Status Dot */
+.sp-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.sp-status-dot.online,
+.sp-status-dot.installed {
+  background-color: var(--sp-accent-success);
+}
+
+.sp-status-dot.warning {
+  background-color: var(--sp-accent-warning);
+}
+
+.sp-status-dot.offline {
+  background-color: var(--sp-accent-error);
+}
+
+/* 3b. Dedicated EngineStatusIndicator in Header */
+.sp-engine-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.sp-status-text {
+  color: var(--sp-text-muted);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.sp-status-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-accent-success);
+  transition: opacity 0.2s ease;
+  user-select: none;
+}
+
+.sp-status-check-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--sp-accent-success);
+  stroke: var(--sp-accent-success);
+  stroke-width: 2.2;
+}
+
+.sp-status-error-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sp-status-error-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--sp-accent-warning);
+  border: 1px solid var(--sp-accent-warning);
+  border-radius: 50%;
+  line-height: 1;
+}
+
+.sp-retry-btn {
+  height: 20px !important;
+  padding: 0 8px !important;
+  font-size: 10.5px !important;
+  border-radius: var(--sp-radius-xs) !important;
+}
+
+/* 4. Selection Summary Row */
+.sp-selection-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--sp-text-secondary);
+  padding: 2px 0;
+}
+
+.sp-selection-summary strong {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* 5. Empty State (Quiet, No Giant Illustrations) */
+.sp-empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0;
+}
+
+.sp-empty-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sp-text-muted);
+}
+
+.sp-empty-desc {
+  font-size: 11px;
+  color: var(--sp-text-disabled);
+}
+
+/* 6. Engine Lifecycle Status Banner */
+.sp-engine-status-banner {
+  background-color: var(--sp-bg-surface-elevated);
+  border: 1px solid var(--sp-border-subtle);
+  border-radius: var(--sp-radius-md);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 14px 0;
+  transition: opacity 0.3s ease;
+}
+
+.sp-engine-status-banner.starting {
+  border-color: rgba(99, 102, 241, 0.3);
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.sp-engine-status-banner.error {
+  border-color: rgba(239, 68, 68, 0.3);
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+.sp-engine-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--sp-text-secondary);
+}
+
+.sp-status-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--sp-accent-primary);
+  animation: sp-pulse 1.5s infinite;
+}
+
+@keyframes sp-pulse {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  50% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(0.85); opacity: 0.6; }
+}
+
+.sp-offline-banner {
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--sp-radius-md);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sp-offline-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sp-offline-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #fca5a5;
+}
+
+.sp-offline-sub {
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+/* 7. Toast Alerts */
+.sp-toast-container {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 300;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sp-toast {
+  background-color: var(--sp-bg-surface-elevated);
+  border: 1px solid var(--sp-border-medium);
+  border-radius: var(--sp-radius-md);
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--sp-text-primary);
+  box-shadow: var(--sp-shadow-md);
+  pointer-events: auto;
+  animation: spToastSlideUp 140ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@keyframes spToastSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sp-toast.success {
+  border-color: rgba(16, 185, 129, 0.35);
+  background-color: #12241c;
+}
+
+.sp-toast.error {
+  border-color: rgba(239, 68, 68, 0.35);
+  background-color: #261618;
+}
+
+/* 8. Managed Storage Card */
+.sp-storage-card {
+  background-color: var(--sp-bg-input);
+  border: 1px solid var(--sp-border-subtle);
+  border-radius: var(--sp-radius-md);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.sp-storage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sp-storage-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+}
+
+.sp-storage-subtext {
+  font-size: 11px;
+  color: var(--sp-text-muted);
+  word-break: break-all;
+  line-height: 1.35;
+}
+
+.sp-storage-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+  border-top: 1px solid var(--sp-border-subtle);
+}
+

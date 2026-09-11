@@ -1,0 +1,223 @@
+/* ==========================================================================
+   Speechify Design System — Custom Accessible Dropdown
+   Clean, quiet dropdown matching native Premiere Pro panels
+   ========================================================================== */
+
+.sp-dropdown-container {
+  position: relative;
+  width: 100%;
+}
+
+.sp-dropdown-trigger {
+  width: 100%;
+  height: var(--sp-height-md);
+  padding: 0 10px;
+  background-color: var(--sp-bg-input);
+  border: 1px solid var(--sp-border-subtle);
+  border-radius: var(--sp-radius-md);
+  color: var(--sp-text-primary);
+  font-family: var(--sp-font-sans);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: border-color var(--sp-transition-fast), background-color var(--sp-transition-fast);
+  box-sizing: border-box;
+}
+
+.sp-dropdown-trigger:hover {
+  background-color: var(--sp-bg-surface-hover);
+  border-color: var(--sp-border-medium);
+}
+
+.sp-dropdown-trigger:focus-visible,
+.sp-dropdown-container.open .sp-dropdown-trigger {
+  border-color: var(--sp-border-focus);
+  background-color: var(--sp-bg-surface-elevated);
+}
+
+.sp-dropdown-selected-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.sp-dropdown-selected-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.sp-dropdown-chevron {
+  width: 12px;
+  height: 12px;
+  color: var(--sp-text-muted);
+  flex-shrink: 0;
+  transition: transform var(--sp-transition-fast);
+}
+
+.sp-dropdown-container.open .sp-dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu Popover */
+.sp-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: var(--sp-bg-surface-elevated);
+  border: 1px solid var(--sp-border-medium);
+  border-radius: var(--sp-radius-md);
+  box-shadow: var(--sp-shadow-md);
+  z-index: 100;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 4px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  box-sizing: border-box;
+}
+
+.sp-dropdown-container.open .sp-dropdown-menu {
+  display: flex;
+  animation: spDropdownFadeIn 120ms ease;
+}
+
+@keyframes spDropdownFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dropdown Options */
+.sp-dropdown-option {
+  padding: 8px 10px;
+  border-radius: var(--sp-radius-sm);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: background-color var(--sp-transition-fast);
+}
+
+.sp-dropdown-option:hover {
+  background-color: var(--sp-bg-surface-hover);
+}
+
+.sp-dropdown-option.selected {
+  background-color: var(--sp-accent-primary-subtle);
+}
+
+.sp-dropdown-opt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sp-dropdown-opt-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+}
+
+.sp-dropdown-option.selected .sp-dropdown-opt-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sp-dropdown-opt-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--sp-accent-primary-hover);
+  padding: 1px 6px;
+  background-color: rgba(37, 99, 235, 0.15);
+  border-radius: var(--sp-radius-pill);
+}
+
+.sp-dropdown-opt-desc {
+  font-size: 11px;
+  color: var(--sp-text-muted);
+}
+
+.sp-dropdown-opt-meta {
+  font-size: 10px;
+  color: var(--sp-text-secondary);
+  margin-top: 2px;
+}
+
+/* Multi-select Track Checklist */
+.sp-track-header {
+  padding: 6px 10px 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sp-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--sp-border-subtle);
+  margin-bottom: 4px;
+}
+
+#trackListContainer {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: 2px;
+}
+
+.sp-track-item {
+  padding: 6px 10px;
+  border-radius: var(--sp-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color var(--sp-transition-fast);
+  user-select: none;
+}
+
+.sp-track-item:hover {
+  background-color: var(--sp-bg-surface-hover);
+}
+
+.sp-track-item.selected {
+  background-color: rgba(37, 99, 235, 0.12);
+}
+
+.sp-track-checkbox {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--sp-accent-primary);
+  cursor: pointer;
+}
+
+.sp-track-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sp-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sp-track-footer {
+  padding: 6px 8px 4px 8px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--sp-border-subtle);
+  margin-top: 4px;
+}
+
+.sp-track-done-btn {
+  font-size: 11px;
+  padding: 3px 10px;
+  height: 24px;
+}

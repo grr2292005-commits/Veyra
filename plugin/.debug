@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionList>
+    <Extension Id="com.speechify.speechenhancer.panel">
+        <HostList>
+            <Host Name="PPRO" Port="8088"/>
+        </HostList>
+    </Extension>
+    <Extension Id="com.voxforge.speechenhancer.panel">
+        <HostList>
+            <Host Name="PPRO" Port="8088"/>
+        </HostList>
+    </Extension>
+</ExtensionList>
