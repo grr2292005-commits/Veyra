@@ -95,7 +95,7 @@
       "checkpoint_filename": "last_best_checkpoint.pt",
       "checkpoint_size_bytes": 38845593,
       "download_url": "https://huggingface.co/alibabasglab/MossFormerGAN_SE_16K/resolve/main/last_best_checkpoint.pt",
-      "sha256": "3cb49a4f4d2f0d9ff4a19b222956cf57422f28cfdfab805b8ffce16e885c07b0",
+      "sha256": "04bf00db575389e1ea8b1fcca48d9efcf073e50ad170e6dd5230df3bac98be27",
       "paper": "ClearerVoice-Studio: An Open-Source Processing Suite for Speech Enhancement, Separation, and Dereverberation (arXiv:2407.03901)",
       "license": "Apache 2.0",
       "published_benchmarks": {
