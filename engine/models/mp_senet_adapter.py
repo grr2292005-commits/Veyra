@@ -36,13 +36,16 @@ class MPSENetAdapter(BaseModelAdapter):
         if not os.path.exists(cfg_path):
             # Fallback default configuration
             cfg = {
-                "dense_channel": 64, "compress_factor": 0.3, "num_tsconformers": 4,
+                "dense_channel": 64, "compress_factor": 0.3, "num_tsconformers": 4, "beta": 2.0,
                 "sampling_rate": 16000, "segment_size": 32000,
                 "n_fft": 400, "hop_size": 100, "win_size": 400
             }
         else:
             with open(cfg_path, "r", encoding="utf-8") as f:
                 cfg = json.load(f)
+
+        if "beta" not in cfg:
+            cfg["beta"] = 2.0
 
         self.config = AttrDict(cfg)
         self.model = MPNet(self.config).to(self.device).eval()

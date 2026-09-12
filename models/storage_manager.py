@@ -363,10 +363,19 @@ class ModelStorageManager:
         # For models with config files, verify config presence
         if model_id == "mp_senet":
             cfg = os.path.join(os.path.dirname(path), "config.json")
-            if not os.path.isfile(cfg):
+            need_write = not os.path.isfile(cfg)
+            if not need_write:
+                try:
+                    with open(cfg, "r", encoding="utf-8") as f:
+                        cdata = json.load(f)
+                        if "beta" not in cdata:
+                            need_write = True
+                except Exception:
+                    need_write = True
+            if need_write:
                 try:
                     default_cfg = {
-                        "dense_channel": 64, "compress_factor": 0.3, "num_tsconformers": 4,
+                        "dense_channel": 64, "compress_factor": 0.3, "num_tsconformers": 4, "beta": 2.0,
                         "sampling_rate": 16000, "segment_size": 32000,
                         "n_fft": 400, "hop_size": 100, "win_size": 400
                     }
