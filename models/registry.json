@@ -22,8 +22,8 @@
       "parameter_count": 2263372,
       "checkpoint_filename": "g_best_dns",
       "checkpoint_size_bytes": 9138054,
-      "download_url": "https://huggingface.co/JacobLinCool/MP-SENet-DNS/resolve/main/g_best_dns",
-      "sha256": "4c45bb22b10a9c68705f4e69b5962b704c351c911b33e9d8926eaebcbb7cf61d",
+      "download_url": "https://raw.githubusercontent.com/yxlu-0102/MP-SENet/main/best_ckpt/g_best_dns",
+      "sha256": "97a77ba67c5c484c65363bb703ea85962f773ca0819e22ce81b4ec33db5e7206",
       "paper": "Explicit Estimation of Magnitude and Phase Spectra in Parallel for High-Quality Speech Enhancement (Interspeech / IEEE/ACM TASLP)",
       "license": "MIT",
       "published_benchmarks": {
