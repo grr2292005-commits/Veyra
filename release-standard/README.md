@@ -28,7 +28,7 @@ Veyra is a high-performance, 100% offline neural speech enhancement extension fo
 ## Installation
 
 1. Close Adobe Premiere Pro if it is running.
-2. Run **`install.bat`** (or `installers\install.bat`).
+2. Run **`Veyra-Setup.exe`**.
 3. The automated installer will:
    - Detect your system hardware and compute capabilities.
    - Set up an isolated private runtime in `%LOCALAPPDATA%\Veyra\runtime`.
@@ -54,7 +54,7 @@ Veyra is a high-performance, 100% offline neural speech enhancement extension fo
 
 ## Uninstallation
 
-Run **`uninstall.bat`**. Your projects, sequence timelines, and downloaded models remain completely safe.
+Run **`Veyra-Uninstall.exe`**. Your projects, sequence timelines, and downloaded models remain completely safe.
 
 ---
 

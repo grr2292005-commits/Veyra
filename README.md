@@ -36,7 +36,7 @@ Zero cloud subscriptions. Zero audio uploads. Maximum privacy, speed, and acoust
 ### 1. Installation
 Run the automated installer:
 ```cmd
-SpeechEnhancerPro\install.bat
+Veyra-Setup.exe
 ```
 This automatically deploys Veyra to:
 - `%APPDATA%\Adobe\CEP\extensions\com.speechify.speechenhancer` (Window -> Extensions -> Veyra)
@@ -51,10 +51,10 @@ This automatically deploys Veyra to:
 ### 4. Uninstallation
 To cleanly remove the extension:
 ```cmd
-SpeechEnhancerPro\uninstall.bat
+Veyra-Uninstall.exe
 ```
 > [!NOTE]
-> `uninstall.bat` safely removes the extension from Adobe Premiere Pro without deleting your downloaded model files. To free up disk space, you can delete the `SpeechEnhancerPro\models\storage` folder manually.
+> `Veyra-Uninstall.exe` safely removes the extension from Adobe Premiere Pro without deleting your downloaded model files. To free up disk space, you can delete the `%LOCALAPPDATA%\Veyra\models` folder manually.
 
 ---
 
