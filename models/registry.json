@@ -59,7 +59,7 @@
       "checkpoint_filename": "pytorch_model.bin",
       "checkpoint_size_bytes": 8424575,
       "download_url": "https://www.modelscope.cn/models/iic/speech_zipenhancer_ans_multiloss_16k_base/resolve/master/pytorch_model.bin",
-      "sha256": "472dd962b16df3d158fa9960251147a27eb255b774c86b24ae30815450fdf588",
+      "sha256": "b18896915e27a821585584221d0c0820f35e12145315ae3f1e73ccd5a68d195f",
       "paper": "ZipEnhancer: Dual-Path Down-Up Sampling-based Zipformer for Monaural Speech Enhancement (ICASSP 2025)",
       "license": "Apache 2.0",
       "published_benchmarks": {
