@@ -22,11 +22,16 @@ class DeepFilterNetAdapter(BaseModelAdapter):
             from df.enhance import init_df
             from df.config import config
 
-            ckpt_dir = os.path.dirname(checkpoint_path)
             if os.path.isfile(checkpoint_path):
-                self.model, self.df_state, _ = init_df()
+                base_dir = os.path.dirname(os.path.dirname(checkpoint_path))
+                if not os.path.isfile(os.path.join(base_dir, "config.ini")):
+                    base_dir = os.path.dirname(checkpoint_path)
+            elif os.path.isdir(checkpoint_path):
+                base_dir = checkpoint_path
             else:
-                self.model, self.df_state, _ = init_df(model_base_dir=ckpt_dir)
+                base_dir = os.path.dirname(checkpoint_path)
+
+            self.model, self.df_state, _ = init_df(model_base_dir=base_dir)
 
             dev_str = "cuda:0" if self.device.type == "cuda" else "cpu"
             config.set("DEVICE", dev_str, str, section="train")

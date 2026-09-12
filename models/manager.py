@@ -144,7 +144,76 @@ class ModelManager:
                         f"Expected {expected_sha256}, got {actual_sha256}"
                     )
 
-            # Atomic Commit
+            # Handle archive models (e.g. DeepFilterNet3.zip)
+            if dest_path.endswith(".zip") or model_id == "deepfilternet3":
+                import zipfile
+                if progress_cb:
+                    progress_cb(98.0, f"Extracting {model_meta['name']} archive...")
+                
+                with zipfile.ZipFile(temp_dest, "r") as zf:
+                    namelist = zf.namelist()
+                    top_folder = namelist[0].split("/")[0] if "/" in namelist[0] else namelist[0].split("\\")[0] if "\\" in namelist[0] else ""
+                    extract_target = self.storage_path if (top_folder and top_folder.lower() == canonical_folder.lower()) else model_dir
+
+                    for member in namelist:
+                        abs_target = os.path.abspath(os.path.join(extract_target, member))
+                        if not abs_target.startswith(os.path.abspath(extract_target)):
+                            raise ValueError(f"Zip extraction path traversal attempt blocked: {member}")
+                        zf.extract(member, extract_target)
+
+                if os.path.exists(temp_dest):
+                    try:
+                        os.remove(temp_dest)
+                    except Exception:
+                        pass
+
+                # Verify extracted DeepFilterNet3 files
+                cand_ckpt = os.path.join(model_dir, "checkpoints", "model_120.ckpt.best")
+                if not os.path.isfile(cand_ckpt):
+                    cand_ckpt = os.path.join(model_dir, "DeepFilterNet3", "checkpoints", "model_120.ckpt.best")
+
+                cand_cfg = os.path.join(model_dir, "config.ini")
+                if not os.path.isfile(cand_cfg):
+                    cand_cfg = os.path.join(model_dir, "DeepFilterNet3", "config.ini")
+
+                if not os.path.isfile(cand_ckpt) or not os.path.isfile(cand_cfg):
+                    raise FileNotFoundError(f"Archive extraction incomplete for {model_id}: config.ini or model_120.ckpt.best missing in {model_dir}")
+
+                # Verify config.ini size and sha256 hash
+                cfg_size = os.path.getsize(cand_cfg)
+                if cfg_size != 2067:
+                    raise IOError(f"Extracted config.ini size mismatch: {cfg_size} bytes, expected 2067 bytes")
+                cfg_hasher = hashlib.sha256()
+                with open(cand_cfg, "rb") as f:
+                    for chunk in iter(lambda: f.read(65536), b""):
+                        cfg_hasher.update(chunk)
+                cfg_sha = cfg_hasher.hexdigest().lower()
+                if cfg_sha != "415eb925d44990d938fb739f514aa3662c1ec0ea836cff044fa1291b82cb4290":
+                    raise ValueError(f"Extracted config.ini SHA-256 verification failed! Got {cfg_sha}")
+
+                # Verify model_120.ckpt.best size and sha256 hash
+                ckpt_size = os.path.getsize(cand_ckpt)
+                if ckpt_size != 8714073:
+                    raise IOError(f"Extracted checkpoint size mismatch: {ckpt_size} bytes, expected 8714073 bytes")
+                ckpt_hasher = hashlib.sha256()
+                with open(cand_ckpt, "rb") as f:
+                    for chunk in iter(lambda: f.read(65536), b""):
+                        ckpt_hasher.update(chunk)
+                ckpt_sha = ckpt_hasher.hexdigest().lower()
+                if ckpt_sha != "23b92884f63ccf54bb026014604625ab231657b6480df65db4095c4c171e6003":
+                    raise ValueError(f"Extracted model_120.ckpt.best SHA-256 verification failed! Got {ckpt_sha}")
+
+                if progress_cb:
+                    progress_cb(100.0, f"{model_meta['name']} installed and extracted successfully.")
+
+                return {
+                    "success": True,
+                    "model_id": model_id,
+                    "installed_path": cand_ckpt,
+                    "size_bytes": actual_size
+                }
+
+            # Atomic Commit for single file checkpoints
             if os.path.exists(dest_path):
                 os.remove(dest_path)
             os.replace(temp_dest, dest_path)

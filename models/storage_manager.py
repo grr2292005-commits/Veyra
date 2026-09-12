@@ -333,6 +333,13 @@ class ModelStorageManager:
             candidate = os.path.join(self.storage_path, folder_name, filename)
             if os.path.isfile(candidate):
                 return candidate
+            if model_id == "deepfilternet3" or filename.endswith(".zip"):
+                cand_extracted = os.path.join(self.storage_path, folder_name, "checkpoints", "model_120.ckpt.best")
+                if os.path.isfile(cand_extracted):
+                    return cand_extracted
+                cand_extracted2 = os.path.join(self.storage_path, folder_name, "DeepFilterNet3", "checkpoints", "model_120.ckpt.best")
+                if os.path.isfile(cand_extracted2):
+                    return cand_extracted2
 
         # Direct location: storage_path/filename
         candidate_direct = os.path.join(self.storage_path, filename)
@@ -359,6 +366,14 @@ class ModelStorageManager:
         min_expected = 100000 # At least 100 KB
         if size < min_expected:
             return "invalid", path, size
+
+        # For DeepFilterNet3, verify config.ini presence
+        if model_id == "deepfilternet3":
+            ckpt_dir = os.path.dirname(path)
+            base_dir = os.path.dirname(ckpt_dir)
+            cfg_path = os.path.join(base_dir, "config.ini")
+            if not os.path.isfile(cfg_path):
+                return "invalid", path, size
 
         # For models with config files, verify config presence
         if model_id == "mp_senet":
